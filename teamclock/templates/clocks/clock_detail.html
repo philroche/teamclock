@@ -82,7 +82,7 @@
                 time_wrapper.append($('<span></span>').addClass("time"));
                 time_wrapper.append($('<em></em>').addClass("tz"));
                 team_member_element.append(time_wrapper);
-                team_member_element.append($('<span></span>').addClass("name").text(team_member));
+                team_member_element.append($('<span></span>').addClass("name").text(team_member + ' ('+clocks[team_member]['city'] +')'));
                 team_member_element.append($('<span></span>').addClass("date"));
                 container.append(team_member_element);
             }
