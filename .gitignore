@@ -70,3 +70,4 @@ teamclock/media/
 
 # MailHog binary
 mailhog
+/.idea/

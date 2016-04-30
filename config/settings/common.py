@@ -39,12 +39,14 @@ THIRD_PARTY_APPS = (
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+    'timezone_field',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'teamclock.users',  # custom users app
     # Your stuff: custom apps go here
+    'teamclock.clocks',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

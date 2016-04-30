@@ -1,0 +1,123 @@
+{% load staticfiles i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    {% block javascript %}
+        <!-- place project specific Javascript in this file -->
+        <script type="application/javascript" src="{% static 'js/clocks/jquery-1.12.3.min.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/clocks/moment-with-locales.js' %}"></script>
+        <script type="application/javascript" src="{% static 'js/clocks/moment-timezone-with-data-2010-2020.js' %}"></script>
+    {% endblock javascript %}
+
+    <title>{{ object.name }}</title>
+
+    <style type="text/css">
+        html, body, #container{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: "Gentium Basic", "Arial", "SansSerif";
+        }
+        .team_member
+        {
+            display: block;
+            background: #eee;
+            outline: 1px dotted grey;
+            width: 50%;
+            height: 50%;
+            float: left;
+            position: relative;
+        }
+        .time_wrapper{
+            display: block;
+            padding: 10% 0;
+            text-align: center;
+        }
+        .time_wrapper .time{
+            font-size: 5em;
+        }
+        .team_member .date{
+            padding-left: 2em;
+        }
+        .team_member .name{
+            font-size: 2em;
+            position: absolute;
+            top: 0.5em;
+            left: 0.5em;
+        }
+        .team_member .tz{
+            padding: 0 1em;
+        }
+    </style>
+
+    <title></title>
+
+
+
+
+
+
+
+    <script type='application/javascript'>//<![CDATA[
+    $( document ).ready(function() {
+
+        var clocks = {};
+        //see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for list of timezones
+        {% for teammember in object.teammember_set.all  %}
+        clocks['{{ teammember.name }}'] = {'city': '{{ teammember.city }}', 'iana_timezone': '{{ teammember.timezone }}', 'color': '{{ teammember.color }}' };
+        {% endfor %}
+
+        function createClocks()
+        {
+            var container = $("#container");
+            container.empty();
+            for (var team_member in clocks) {
+                var team_member_element = $('<div></div>').attr({ id : team_member }).addClass("team_member");
+                team_member_element.css('background-color', clocks[team_member]['color']);
+                var time_wrapper = $('<div></div>').addClass("time_wrapper");
+                time_wrapper.append($('<span></span>').addClass("time"));
+                time_wrapper.append($('<em></em>').addClass("tz"));
+                team_member_element.append(time_wrapper);
+                team_member_element.append($('<span></span>').addClass("name").text(team_member));
+                team_member_element.append($('<span></span>').addClass("date"));
+                container.append(team_member_element);
+            }
+            updateClocks();
+        }
+        function updateClocks()
+        {
+            var now = moment().utc();
+            for (var team_member in clocks) {
+                var team_member_element = $("#"+team_member);
+                var tz_now = now.tz(clocks[team_member]['iana_timezone']);
+                var time_str = tz_now.format("hh:mm a");
+                var date_str = tz_now.format("dddd, MMMM Do YYYY");
+                var tz_str = tz_now.format("z");
+                $('.time' ,$(team_member_element)).text( time_str );
+                $('.date' ,$(team_member_element)).text( date_str );
+                $('.tz' ,$(team_member_element)).text( tz_str );
+            }
+        }
+        createClocks();
+        setInterval(updateClocks, 60000);
+
+    });
+    //]]>
+    </script>
+</head>
+<body>
+<body>
+
+<div id="container">
+</div>
+</body>
+
+
+</body>
+
+</html>
+
